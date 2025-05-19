@@ -45,6 +45,7 @@
 
 ## 🎥 Proje Tanıtım Videosu
 
-[![Proje Tanıtım Videosu](https://img.youtube.com/vi/aCJ_rFHl12E/0.jpg)](https://youtu.be/aCJ_rFHl12E)
+[![Proje Tanıtım Videosu](https://img.youtube.com/vi/aCJ_rFHl12E/0.jpg)](https://www.youtube.com/watch?v=aCJ_rFHl12E)
+
 
 
