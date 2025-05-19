@@ -1,0 +1,799 @@
+﻿@{
+    ViewBag.Title = "Admin";
+}
+@using WebProject.Models
+@model AdminViewModel
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Paneli</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .tab-content {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <h2 class="text-center mb-4">Admin Paneli</h2>
+        @{ 
+            string aktifDuyuru= "tab-pane fade show active";
+            string aktifBolum= "tab-pane fade";
+            string aktifAsistan= "tab-pane fade";
+            string aktifOgretim= "tab-pane fade";
+            string aktifNobet= "tab-pane fade";
+            string aktifRandevu= "tab-pane fade";
+        }
+        <!-- Tab Navigasyonu -->
+        <ul class="nav nav-tabs" id="adminTabs" role="tablist">
+            @if (Session["Tab"] as string == "duyurular")
+            {
+                <li class="nav-item active" role="presentation">
+                    <button class="nav-link active" id="duyurular-tab" data-bs-toggle="tab" data-bs-target="#duyurular" type="button" role="tab" aria-controls="duyurular" aria-selected="true">Duyurular</button>
+                </li>
+                aktifDuyuru = "tab-pane fade show active";
+            }
+            else
+            {
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="duyurular-tab" data-bs-toggle="tab" data-bs-target="#duyurular" type="button" role="tab" aria-controls="duyurular" aria-selected="false">Duyurular</button>
+                </li>
+                aktifDuyuru = "tab-pane fade";
+            }
+            @if (Session["Tab"] as string == "bolumler")
+            {
+                <li class="nav-item active" role="presentation">
+                    <button class="nav-link active" id="bolumler-tab" data-bs-toggle="tab" data-bs-target="#bolumler" type="button" role="tab" aria-controls="bolumler" aria-selected="true">Bölümler</button>
+                </li>
+                aktifBolum = "tab-pane fade show active";
+            }
+            else
+            {
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="bolumler-tab" data-bs-toggle="tab" data-bs-target="#bolumler" type="button" role="tab" aria-controls="bolumler" aria-selected="false">Bölümler</button>
+                </li>
+                aktifBolum = "tab-pane fade";
+            }
+            @if (Session["Tab"] as string == "asistanlar")
+            {
+                <li class="nav-item active" role="presentation">
+                    <button class="nav-link active" id="asistanlar-tab" data-bs-toggle="tab" data-bs-target="#asistanlar" type="button" role="tab" aria-controls="asistanlar" aria-selected="true">Asistanlar</button>
+                </li>
+                aktifAsistan = "tab-pane fade show active";
+
+            }
+            else
+            {
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="asistanlar-tab" data-bs-toggle="tab" data-bs-target="#asistanlar" type="button" role="tab" aria-controls="asistanlar" aria-selected="false">Asistanlar</button>
+                </li>
+                aktifAsistan = "tab-pane fade";
+
+            }
+            @if (Session["Tab"] as string == "ogretim")
+            {
+                <li class="nav-item active" role="presentation">
+                    <button class="nav-link active" id="ogretim-tab" data-bs-toggle="tab" data-bs-target="#ogretim" type="button" role="tab" aria-controls="ogretim" aria-selected="true">Öğretim Üyeleri</button>
+                </li>
+                aktifOgretim = "tab-pane fade show active";
+
+            }
+            else
+            {
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="ogretim-tab" data-bs-toggle="tab" data-bs-target="#ogretim" type="button" role="tab" aria-controls="ogretim" aria-selected="false">Öğretim Üyeleri</button>
+                </li>
+                aktifOgretim = "tab-pane fade";
+            }
+            @if (Session["Tab"] as string == "nobetler")
+            {
+                <li class="nav-item active" role="presentation">
+                    <button class="nav-link active" id="nobetler-tab" data-bs-toggle="tab" data-bs-target="#nobetler" type="button" role="tab" aria-controls="nobetler" aria-selected="true">Nöbetler</button>
+                </li>
+                aktifNobet = "tab-pane fade show active";
+
+            }
+            else
+            {
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="nobetler-tab" data-bs-toggle="tab" data-bs-target="#nobetler" type="button" role="tab" aria-controls="nobetler" aria-selected="false">Nöbetler</button>
+                </li>
+                aktifNobet = "tab-pane fade";
+            }
+            @if (Session["Tab"] as string == "randevular")
+            {
+                <li class="nav-item active" role="presentation">
+                    <button class="nav-link active" id="randevular-tab" data-bs-toggle="tab" data-bs-target="#randevular" type="button" role="tab" aria-controls="randevular" aria-selected="true">Randevular</button>
+                </li>
+                aktifRandevu = "tab-pane fade show active";
+
+            }
+            else
+            {
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="randevular-tab" data-bs-toggle="tab" data-bs-target="#randevular" type="button" role="tab" aria-controls="randevular" aria-selected="false">Randevular</button>
+                </li>
+                aktifRandevu = "tab-pane fade";
+            }
+        </ul>
+
+        <!-- Tab İçerikleri -->
+        <div class="tab-content">
+            <!-- Duyurular -->
+            <div class="@aktifDuyuru" id="duyurular" role="tabpanel" aria-labelledby="duyurular-tab">
+                <h4>Duyurular Yönetimi</h4>
+                <form action="/Home/DuyuruEkle" method="post" class="mb-4">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <textarea name="DuyuruMetni" class="form-control" placeholder="Duyuru Metni" required></textarea>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="date" name="Date" class="form-control" required />
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-success">Ekle</button>
+                        </div>
+                    </div>
+                </form>
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Duyuru Metni</th>
+                            <th>Tarih</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var duyuru in Model.Duyurular)
+                        {
+                            <tr>
+                                <td>@duyuru.ID</td>
+                                <td>@duyuru.DuyuruMetni</td>
+                                <td>@duyuru.Date.ToShortDateString()</td>
+                                <td>
+                                    <form action="/Home/DuyuruSil" method="post" style="display: inline;">
+                                        <input type="hidden" name="ID" value="@duyuru.ID" />
+                                        <button type="submit" class="btn btn-danger btn-sm">Sil</button>
+                                    </form>
+                                    <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#updateModal+@duyuru.ID">
+                                        Güncelle
+                                    </button>
+
+                                    <div class="modal fade" id="updateModal+@duyuru.ID" tabindex="-1" aria-labelledby="updateModalLabel+@duyuru.ID" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="updateModalLabel+@duyuru.ID">Duyuru Güncelle</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <form method="post" action="/Home/DuyuruGuncelle">
+                                                    <div class="modal-body">
+                                                        <input type="hidden" name="ID" value="@duyuru.ID" />
+                                                        <div class="mb-3">
+                                                            <label for="DuyuruMetni+@duyuru.ID" class="form-label">Güncel Duyuru Metni</label>
+                                                            <textarea name="DuyuruMetni" class="form-control" id="DuyuruMetni+@duyuru.ID">@duyuru.DuyuruMetni</textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="submit" class="btn btn-success">Kaydet</button>
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Bölümler -->
+            <div class="@aktifBolum" id="bolumler" role="tabpanel" aria-labelledby="bolumler-tab">
+                <h4>Çocuk Acil Yönetimi</h4>
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Yatak Sayısı</th>
+                            <th>Boş Yatak Sayısı</th>
+                            <th>Öğretim Üyesi</th>
+                            <th>Nobetci Asistan</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var bolum in Model.CocukAcil)
+                        {
+                            <tr>
+                                <td>@bolum.YatakSayisi</td>
+                                <td>@bolum.BosYatakSayisi</td>
+                                <td>@bolum.OgretimUyesi</td>
+                                <td>@bolum.NobetciAsistan</td>
+                                <td>
+                                    <!-- Güncelleme Formu -->
+                                    <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#updateModalCocukAcil@bolum.ID">
+                                        Güncelle
+                                    </button>
+
+                                    <div class="modal fade" id="updateModalCocukAcil@bolum.ID" tabindex="-1" aria-labelledby="updateModalLabelCocukAcil@bolum.ID" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="updateModalLabelCocukAcil@bolum.ID">Güncelle</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <form method="post" action="/Home/CocukAcilGuncelle">
+                                                    <div class="modal-body">
+                                                        <input type="hidden" name="ID" value="@bolum.ID" />
+                                                        <div class="mb-3">
+                                                            <label for="YatakSayisiCocukAcil@bolum.ID" class="form-label">Güncel Yatak Sayısı</label>
+                                                            <textarea name="YatakSayisi" class="form-control" id="YatakSayisiCocukAcil@bolum.ID"></textarea>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="BosYatakSayisiCocukAcil@bolum.ID" class="form-label">Güncel Bos Yatak Sayisi</label>
+                                                            <textarea name="BosYatakSayisi" class="form-control" id="BosYatakSayisiCocukAcil@bolum.ID"></textarea>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="OgretimUyesiCocukAcil@bolum.ID" class="form-label">Güncel Öğretim Üyesi</label>
+                                                            <textarea name="OgretimUyesi" class="form-control" id="OgretimUyesiCocukAcil@bolum.ID"></textarea>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="NobetciAsistanCocukAcil@bolum.ID" class="form-label">Güncel Nobetçi Asistan</label>
+                                                            <textarea name="NobetciAsistan" class="form-control" id="NobetciAsistanCocukAcil@bolum.ID"></textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="submit" class="btn btn-success">Kaydet</button>
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+                <hr />
+                <h4>Çocuk Hematolojisi Ve Onkolojisi Yönetimi</h4>
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Yatak Sayısı</th>
+                            <th>Boş Yatak Sayısı</th>
+                            <th>Öğretim Üyesi</th>
+                            <th>Nobetci Asistan</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var bolum in Model.CocukHematolojisiVeOnkolojisi)
+                        {
+                            <tr>
+                                <td>@bolum.YatakSayisi</td>
+                                <td>@bolum.BosYatakSayisi</td>
+                                <td>@bolum.OgretimUyesi</td>
+                                <td>@bolum.NobetciAsistan</td>
+                                <td>
+                                    <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#updateModalCocukHematolojisiVeOnkolojisi@bolum.ID">
+                                        Güncelle
+                                    </button>
+
+                                    <div class="modal fade" id="updateModalCocukHematolojisiVeOnkolojisi@bolum.ID" tabindex="-1" aria-labelledby="updateModalLabelCocukHematolojisiVeOnkolojisi@bolum.ID" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="updateModalLabelCocukHematolojisiVeOnkolojisi@bolum.ID">Güncelle</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <form method="post" action="/Home/CocukHematolojisiVeOnkolojisiGuncelle">
+                                                    <div class="modal-body">
+                                                        <input type="hidden" name="ID" value="@bolum.ID" />
+                                                        <div class="mb-3">
+                                                            <label for="YatakSayisiCocukHematolojisiVeOnkolojisi@bolum.ID" class="form-label">Güncel Yatak Sayısı</label>
+                                                            <textarea name="YatakSayisi" class="form-control" id="YatakSayisiCocukHematolojisiVeOnkolojisi@bolum.ID"></textarea>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="BosYatakSayisiCocukHematolojisiVeOnkolojisi@bolum.ID" class="form-label">Güncel Bos Yatak Sayisi</label>
+                                                            <textarea name="BosYatakSayisi" class="form-control" id="BosYatakSayisiCocukHematolojisiVeOnkolojisi@bolum.ID"></textarea>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="OgretimUyesiCocukHematolojisiVeOnkolojisi@bolum.ID" class="form-label">Güncel Öğretim Üyesi</label>
+                                                            <textarea name="OgretimUyesi" class="form-control" id="OgretimUyesiCocukHematolojisiVeOnkolojisi@bolum.ID"></textarea>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="NobetciAsistanCocukHematolojisiVeOnkolojisi@bolum.ID" class="form-label">Güncel Nobetçi Asistan</label>
+                                                            <textarea name="NobetciAsistan" class="form-control" id="NobetciAsistanCocukHematolojisiVeOnkolojisi@bolum.ID"></textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="submit" class="btn btn-success">Kaydet</button>
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+                <hr />
+                <h4>Çocuk Yoğun Bakım Yönetimi</h4>
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Yatak Sayısı</th>
+                            <th>Boş Yatak Sayısı</th>
+                            <th>Öğretim Üyesi</th>
+                            <th>Nobetci Asistan</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var bolum in Model.CocukYogunBakim)
+                        {
+                            <tr>
+                                <td>@bolum.YatakSayisi</td>
+                                <td>@bolum.BosYatakSayisi</td>
+                                <td>@bolum.OgretimUyesi</td>
+                                <td>@bolum.NobetciAsistan</td>
+                                <td>
+                                    <!-- Güncelleme Formu -->
+                                    <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#updateModalCocukYogunBakim@bolum.ID">
+                                        Güncelle
+                                    </button>
+
+                                    <div class="modal fade" id="updateModalCocukYogunBakim@bolum.ID" tabindex="-1" aria-labelledby="updateModalLabelCocukYogunBakim@bolum.ID" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="updateModalLabelCocukYogunBakim@bolum.ID">Güncelle</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <form method="post" action="/Home/CocukYogunBakimGuncelle">
+                                                    <div class="modal-body">
+                                                        <input type="hidden" name="ID" value="@bolum.ID" />
+                                                        <div class="mb-3">
+                                                            <label for="YatakSayisiCocukYogunBakim@bolum.ID" class="form-label">Güncel Yatak Sayısı</label>
+                                                            <textarea name="YatakSayisi" class="form-control" id="YatakSayisiCocukYogunBakim@bolum.ID"></textarea>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="BosYatakSayisiCocukYogunBakim@bolum.ID" class="form-label">Güncel Bos Yatak Sayisi</label>
+                                                            <textarea name="BosYatakSayisi" class="form-control" id="BosYatakSayisiCocukYogunBakim@bolum.ID"></textarea>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="OgretimUyesiCocukYogunBakim@bolum.ID" class="form-label">Güncel Öğretim Üyesi</label>
+                                                            <textarea name="OgretimUyesi" class="form-control" id="OgretimUyesiCocukYogunBakim@bolum.ID"></textarea>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="NobetciAsistanCocukYogunBakim@bolum.ID" class="form-label">Güncel Nobetçi Asistan</label>
+                                                            <textarea name="NobetciAsistan" class="form-control" id="NobetciAsistanCocukYogunBakim@bolum.ID"></textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="submit" class="btn btn-success">Kaydet</button>
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Asistanlar -->
+            <div class="@aktifAsistan" id="asistanlar" role="tabpanel" aria-labelledby="asistanlar-tab">
+                <h4>Asistanlar Yönetimi</h4>
+                <!-- Yeni Asistan Ekle Formu -->
+                <form action="/Home/AsistanEkle" method="post" class="mb-4">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <textarea type="text" name="Ad" class="form-control" placeholder="Ad" required></textarea>
+                        </div>
+                        <div class="col-md-2">
+                            <textarea type="text" name="Soyad" class="form-control" placeholder="Soyad" required></textarea>
+                        </div>
+                        <div class="col-md-3">
+                            <textarea type="email" name="Mail" class="form-control" placeholder="E-posta" required></textarea>
+                        </div>
+                        <div class="col-md-2">
+                            <textarea type="text" name="Telefon" class="form-control" placeholder="Telefon" required></textarea>
+                        </div>
+                        <div class="col-md-3">
+                            <textarea type="text" name="Adres" class="form-control" placeholder="Adres" required></textarea>
+                        </div>
+                        <div class="col-md-2 mt-2">
+                            <button type="submit" class="btn btn-success">Ekle</button>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Asistanlar Tablosu -->
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Ad</th>
+                            <th>Soyad</th>
+                            <th>E-posta</th>
+                            <th>Telefon</th>
+                            <th>Adres</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var asistan in Model.Asistanlar)
+                        {
+                            <tr>
+                                <td>@asistan.ID</td>
+                                <td>@asistan.Ad</td>
+                                <td>@asistan.Soyad</td>
+                                <td>@asistan.Mail</td>
+                                <td>@asistan.Telefon</td>
+                                <td>@asistan.Adres</td>
+                                <td>
+                                    <!-- Silme Formu -->
+                                    <form action="/Home/AsistanSil" method="post" style="display: inline;">
+                                        <input type="hidden" name="id" value="@asistan.ID" />
+                                        <button type="submit" class="btn btn-danger btn-sm">Sil</button>
+                                    </form>
+                                    <!-- Güncelleme Formu -->
+                                    <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#updateModal_asistan_@asistan.ID">
+                                        Güncelle
+                                    </button>
+                                    <div class="modal fade" id="updateModal_asistan_@asistan.ID" tabindex="-1" aria-labelledby="updateModalLabel_asistan_@asistan.ID" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="updateModalLabel_asistan_@asistan.ID">Asistan Güncelle</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <form method="post" action="/Home/AsistanGuncelle">
+                                                    <div class="modal-body">
+                                                        <input type="hidden" name="ID" value="@asistan.ID" />
+                                                        <div class="mb-3">
+                                                            <label for="Ad_asistan_@asistan.ID" class="form-label">Güncel Ad</label>
+                                                            <textarea name="Ad" class="form-control" id="Ad_asistan_@asistan.ID">@asistan.Ad</textarea>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="Soyad_asistan_@asistan.ID" class="form-label">Güncel Soyad</label>
+                                                            <textarea name="Soyad" class="form-control" id="Soyad_asistan_@asistan.ID">@asistan.Soyad</textarea>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="Mail_asistan_@asistan.ID" class="form-label">Güncel Mail</label>
+                                                            <textarea name="Mail" class="form-control" id="Mail_asistan_@asistan.ID">@asistan.Mail</textarea>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="Telefon_asistan_@asistan.ID" class="form-label">Güncel Telefon</label>
+                                                            <textarea name="Telefon" class="form-control" id="Telefon_asistan_@asistan.ID">@asistan.Telefon</textarea>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="Adres_asistan_@asistan.ID" class="form-label">Güncel Adres</label>
+                                                            <textarea name="Adres" class="form-control" id="Adres_asistan_@asistan.ID">@asistan.Adres</textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="submit" class="btn btn-success">Kaydet</button>
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Ogretim Uyeleri -->
+            <div class="@aktifOgretim" id="ogretim" role="tabpanel" aria-labelledby="ogretim-tab">
+                <h4>Öğretim Üyeleri Yönetimi</h4>
+                <!-- Yeni Öğretim Üyesi Ekle Formu -->
+                <form action="/Home/OgretimUyesiEkle" method="post" class="mb-4">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <textarea type="text" name="Ad" class="form-control" placeholder="Ad" required></textarea>
+                        </div>
+                        <div class="col-md-2">
+                            <textarea type="text" name="Soyad" class="form-control" placeholder="Soyad" required></textarea>
+                        </div>
+                        <div class="col-md-3">
+                            <textarea type="email" name="Mail" class="form-control" placeholder="E-posta" required></textarea>
+                        </div>
+                        <div class="col-md-2">
+                            <textarea type="text" name="Telefon" class="form-control" placeholder="Telefon" required></textarea>
+                        </div>
+                        <div class="col-md-3">
+                            <textarea type="text" name="Adres" class="form-control" placeholder="Adres" required></textarea>
+                        </div>
+                        <div class="col-md-2 mt-2">
+                            <button type="submit" class="btn btn-success">Ekle</button>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Öğretim Üyeleri Tablosu -->
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Ad</th>
+                            <th>Soyad</th>
+                            <th>E-posta</th>
+                            <th>Telefon</th>
+                            <th>Adres</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var ogretimUyesi in Model.OgretimUyeleri)
+                        {
+                            <tr>
+                                <td>@ogretimUyesi.ID</td>
+                                <td>@ogretimUyesi.Ad</td>
+                                <td>@ogretimUyesi.Soyad</td>
+                                <td>@ogretimUyesi.Mail</td>
+                                <td>@ogretimUyesi.Telefon</td>
+                                <td>@ogretimUyesi.Adres</td>
+                                <td>
+                                    <!-- Silme Formu -->
+                                    <form action="/Home/OgretimUyesiSil" method="post" style="display: inline;">
+                                        <input type="hidden" name="id" value="@ogretimUyesi.ID" />
+                                        <button type="submit" class="btn btn-danger btn-sm">Sil</button>
+                                    </form>
+                                    <!-- Güncelleme Formu -->
+                                    <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#updateModal_ogretim_@ogretimUyesi.ID">
+                                        Güncelle
+                                    </button>
+                                    <div class="modal fade" id="updateModal_ogretim_@ogretimUyesi.ID" tabindex="-1" aria-labelledby="updateModalLabel_ogretim_@ogretimUyesi.ID" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="updateModalLabel_ogretim_@ogretimUyesi.ID">Öğretim Üyesi Güncelle</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <form method="post" action="/Home/OgretimUyesiGuncelle">
+                                                    <div class="modal-body">
+                                                        <input type="hidden" name="ID" value="@ogretimUyesi.ID" />
+                                                        <div class="mb-3">
+                                                            <label for="Ad_ogretim_@ogretimUyesi.ID" class="form-label">Güncel Ad</label>
+                                                            <textarea name="Ad" class="form-control" id="Ad_ogretim_@ogretimUyesi.ID">@ogretimUyesi.Ad</textarea>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="Soyad_ogretim_@ogretimUyesi.ID" class="form-label">Güncel Soyad</label>
+                                                            <textarea name="Soyad" class="form-control" id="Soyad_ogretim_@ogretimUyesi.ID">@ogretimUyesi.Soyad</textarea>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="Mail_ogretim_@ogretimUyesi.ID" class="form-label">Güncel Mail</label>
+                                                            <textarea name="Mail" class="form-control" id="Mail_ogretim_@ogretimUyesi.ID">@ogretimUyesi.Mail</textarea>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="Telefon_ogretim_@ogretimUyesi.ID" class="form-label">Güncel Telefon</label>
+                                                            <textarea name="Telefon" class="form-control" id="Telefon_ogretim_@ogretimUyesi.ID">@ogretimUyesi.Telefon</textarea>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="Adres_ogretim_@ogretimUyesi.ID" class="form-label">Güncel Adres</label>
+                                                            <textarea name="Adres" class="form-control" id="Adres_ogretim_@ogretimUyesi.ID">@ogretimUyesi.Adres</textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="submit" class="btn btn-success">Kaydet</button>
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Nobetler -->
+            <div class="@aktifNobet" id="nobetler" role="tabpanel" aria-labelledby="nobetler-tab">
+                <h4>Nöbetler Yönetimi</h4>
+                <!-- Yeni Nöbet Ekle Formu -->
+
+                <form action="/Home/NobetEkle" method="post" class="mb-4">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <input type="text" name="NobetBolumu" class="form-control" placeholder="NobetBolumu" required />
+                        </div>
+                        <div class="col-md-2">
+                            <input type="text" name="NobetciAsistan" class="form-control" placeholder="NobetciAsistan" required />
+                        </div>
+                        <div class="col-md-3">
+                            <input type="date" name="NobetTarihi" class="form-control" placeholder="NobetTarihi" required />
+                        </div>
+                        <div class="col-md-2 mt-2">
+                            <button type="submit" class="btn btn-success">Ekle</button>
+                        </div>
+                    </div>
+                </form>
+
+
+                <!-- Nöbetler Tablosu -->
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Bölüm</th>
+                            <th>Asistan</th>
+                            <th>Tarih</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var nobet in Model.Nobetler)
+                        {
+                            <tr>
+                                <td>@nobet.ID</td>
+                                <td>@nobet.NobetBolumu</td>
+                                <td>@nobet.NobetciAsistan</td>
+                                <td>@nobet.NobetTarihi.ToString("yyyy-MM-dd")</td>
+                                <td>
+                                    <!-- Silme Formu -->
+                                    <form action="/Home/NobetSil" method="post" style="display: inline;">
+                                        <input type="hidden" name="id" value="@nobet.ID" />
+                                        <button type="submit" class="btn btn-danger btn-sm">Sil</button>
+                                    </form>
+                                    <!-- Güncelleme Formu -->
+                                    <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#updateModal_nobet_@nobet.ID">
+                                        Güncelle
+                                    </button>
+                                    <div class="modal fade" id="updateModal_nobet_@nobet.ID" tabindex="-1" aria-labelledby="updateModalLabel_nobet_@nobet.ID" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="updateModalLabel_nobet_@nobet.ID">Nöbet Güncelle</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <form method="post" action="/Home/NobetGuncelle">
+                                                    <div class="modal-body">
+                                                        <input type="hidden" name="ID" value="@nobet.ID" />
+                                                        <div class="mb-3">
+                                                            <label for="NobetBolumu_nobet_@nobet.ID" class="form-label">Güncel Nöbet Bölümü</label>
+                                                            <textarea name="NobetBolumu" class="form-control" id="NobetBolumu_nobet_@nobet.ID">@nobet.NobetBolumu</textarea>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="NobetciAsistan_nobet_@nobet.ID" class="form-label">Güncel Nöbetçi Asistan</label>
+                                                            <textarea name="NobetciAsistan" class="form-control" id="NobetciAsistan_nobet_@nobet.ID">@nobet.NobetciAsistan</textarea>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="NobetTarihi_nobet_@nobet.ID" class="form-label">Güncel Nöbet Tarihi</label>
+                                                            <input type="date" name="NobetTarihi" class="form-control" id="NobetTarihi_nobet_@nobet.ID" />
+                                                        </div>                                                   
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="submit" class="btn btn-success">Kaydet</button>
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Randevular -->
+            <div class="@aktifRandevu "id="randevular" role="tabpanel" aria-labelledby="randevular-tab">
+                <h4>Randevular Yönetimi</h4>
+                <!-- Yeni Randevu Ekle Formu -->
+                <form action="/Home/RandevuEkle" method="post" class="mb-4">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <input type="text" name="RandevuAsistan" class="form-control" placeholder="RandevuAsistan" required />
+                        </div>
+                        <div class="col-md-2">
+                            <input type="text" name="RandevuOgretimUyesi" class="form-control" placeholder="RandevuOgretimUyesi" required />
+                        </div>
+                        <div class="col-md-3">
+                            <input type="datetime-local" name="RandevuTarihi" class="form-control" placeholder="RandevuTarihi" required />
+                        </div>
+                        <div class="col-md-2 mt-2">
+                            <button type="submit" class="btn btn-success">Ekle</button>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Randevular Tablosu -->
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Asistan</th>
+                            <th>Öğretim Üyesi</th>
+                            <th>Tarih</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var randevu in Model.Randevular)
+                        {
+                            <tr>
+                                <td>@randevu.ID</td>
+                                <td>@randevu.RandevuAsistan</td>
+                                <td>@randevu.RandevuOgretimUyesi</td>
+                                <td>@randevu.RandevuTarihi.ToString("yyyy-MM-dd HH:mm")</td>
+                                <td>
+                                    <!-- Silme Formu -->
+                                    <form action="/Home/RandevuSil" method="post" style="display: inline;">
+                                        <input type="hidden" name="id" value="@randevu.ID" />
+                                        <button type="submit" class="btn btn-danger btn-sm">Sil</button>
+                                    </form>
+                                    <!-- Güncelleme Formu -->
+                                    <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#updateModal_randevu_@randevu.ID">
+                                        Güncelle
+                                    </button>
+                                    <div class="modal fade" id="updateModal_randevu_@randevu.ID" tabindex="-1" aria-labelledby="updateModalLabel_randevu_@randevu.ID" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="updateModalLabel_randevu_@randevu.ID">Randevu Güncelle</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <form method="post" action="/Home/RandevuGuncelle">
+                                                    <div class="modal-body">
+                                                        <input type="hidden" name="ID" value="@randevu.ID" />
+                                                        <div class="mb-3">
+                                                            <label for="RandevuAsistan_randevu_@randevu.ID" class="form-label">Güncel Randevu Asistan</label>
+                                                            <textarea name="RandevuAsistan" class="form-control" id="RandevuAsistan_randevu_@randevu.ID">@randevu.RandevuAsistan</textarea>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="RandevuOgretimUyesi_randevu_@randevu.ID" class="form-label">Güncel Öğretim Üyesi</label>
+                                                            <textarea name="RandevuOgretimUyesi" class="form-control" id="RandevuOgretimUyesi_randevu_@randevu.ID">@randevu.RandevuOgretimUyesi</textarea>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="RandevuTarihi_randevu_@randevu.ID" class="form-label">Güncel Randevu Tarihi</label>
+                                                            <input type="datetime-local" name="RandevuTarihi" class="form-control" id="RandevuTarihi_randevu_@randevu.ID" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="submit" class="btn btn-success">Kaydet</button>
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
