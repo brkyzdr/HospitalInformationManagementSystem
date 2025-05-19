@@ -43,4 +43,8 @@
 
 **Not:** Bu proje bireysel olarak gerçekleştirilmiştir ve tüm veritabanı yapısı Code First yaklaşımı ile oluşturulmuştur.
 
+## 🎥 Proje Tanıtım Videosu
+
+[![Proje Tanıtım Videosu](https://img.youtube.com/vi/aCJ_rFHl12E/0.jpg)](https://youtu.be/aCJ_rFHl12E)
+
 
