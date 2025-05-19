@@ -45,7 +45,7 @@
 
 ## 🎬 Tanıtım Videosu
 
-[![Tanıtım Videosu](https://img.youtube.com/vi/aCJ_rFHl12E/0.jpg)](https://www.youtube.com/watch?v=aCJ_rFHl12E)
+[![Tanıtım Videosu](https://img.youtube.com/vi/aCJ_rFHl12E/0.jpg)] (https://www.youtube.com/watch?v=aCJ_rFHl12E)
 
 
 
